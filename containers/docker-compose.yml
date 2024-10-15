@@ -1,17 +1,36 @@
 version: "3.8"
 
 services:
-  postgres:
-    image: postgres:14
-    container_name: postgresql
-    environment:
-      POSTGRES_DB: shaman
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: example
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+    postgres:
+        image: postgres:14
+        container_name: postgresql
+        env_file:
+            - .env
+        environment:
+            POSTGRES_DB: ${POSTGRES_DB_NAME}
+            POSTGRES_USER: ${POSTGRES_DB_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_DB_PASSWORD}
+        ports:
+            - "5432:5432"
+        volumes:
+            - postgres_data:/data/postgresql
+    mongo:
+        image: mongo:latest
+        container_name: mongodb
+        env_file:
+            - .env
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: ${MONGO_DB_USER}
+            MONGO_INITDB_ROOT_PASSWORD: ${MONGO_DB_PASSWORD}
+        ports:
+            - "27017:27017"
+        volumes:
+            - mongodb_data:/data/mongodb
 
 volumes:
-  postgres_data:
+    postgres_data:
+        driver: local
+        name: postgres_data
+    mongodb_data:
+        driver: local
+        name: mongodb_data
