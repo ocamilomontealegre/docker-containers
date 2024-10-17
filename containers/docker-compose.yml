@@ -13,7 +13,7 @@ services:
         ports:
             - "5432:5432"
         volumes:
-            - postgres_data:/data/postgresql
+            - postgres_data:/var/lib/postgresql/data
     mongo:
         image: mongo:latest
         container_name: mongodb
@@ -22,10 +22,18 @@ services:
         environment:
             MONGO_INITDB_ROOT_USERNAME: ${MONGO_DB_USER}
             MONGO_INITDB_ROOT_PASSWORD: ${MONGO_DB_PASSWORD}
+            MONGO_INITDB_DATABASE: ${MONGO_DB_NAME}
         ports:
             - "27017:27017"
         volumes:
-            - mongodb_data:/data/mongodb
+            - mongodb_data:/data/db
+    redis:
+        image: redis:latest
+        container_name: redis
+        ports:
+            - "6379:6379"
+        volumes:
+            - redis_data:/data
 
 volumes:
     postgres_data:
@@ -34,3 +42,6 @@ volumes:
     mongodb_data:
         driver: local
         name: mongodb_data
+    redis_data:
+        driver: local
+        name: redis_data
