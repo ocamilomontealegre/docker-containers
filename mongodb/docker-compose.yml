@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+    mongo:
+        image: mongo:latest
+        container_name: mongodb
+        env_file:
+            - .env
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: ${MONGO_DB_USER}
+            MONGO_INITDB_ROOT_PASSWORD: ${MONGO_DB_PASSWORD}
+            MONGO_INITDB_DATABASE: ${MONGO_DB_NAME}
+        ports:
+            - "27017:27017"
+        volumes:
+            - mongodb_data:/data/db
+
+volumes:
+    mongodb_data:
+        driver: local
+        name: mongodb_data
